@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sns.post.mapper.PostMapper;
-
+// 이곳은 프로그램이 잘 돌아가는지 테스트를 하기 위한 공간입니다.
 @Controller
 public class TestController {
 
