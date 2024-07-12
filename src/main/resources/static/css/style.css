@@ -2,3 +2,7 @@
 
 header {height: 100px}
 .contents {min-height: 600px}
+
+.shadow-box {background-color: #DCDCDC; width: 1100px; min-height: 300px}
+.insertId, .insertPw {width: 300px}
+.IdAndPwBox {height: 200px}

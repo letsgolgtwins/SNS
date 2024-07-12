@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="frame container">
+		<h2 class="d-flex font-weight-bold mt-3">회원가입</h2>
+		<div class="shadow-box">
+			<div class="d-flex justify-content-center align-items-center m-5">
+				<!-- form -->
+				<form method="post" action="/user/sign-up">
+					<span class="font-weight-bold">아이디</span>
+					<div class="d-flex">
+						<input type="text" name="id" class="form-control mt-2" placeholder="아이디를 입력하세요.">
+						<button type="button" class="form-control btn btn-success mt-2 col-4">중복확인</button>
+					</div>
+					<span class="textArea"></span>
+					
+					<span class="font-weight-bold">비밀번호</span>
+					<input type="password" name="password" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
+				
+					<span class="font-weight-bold">비밀번호 확인</span>
+					<input type="password" name="passwordCheck" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
+				
+					<span class="font-weight-bold">이름</span>
+					<input type="text" name="name" class="form-control mt-2" placeholder="이름을 입력해주세요.">
+					
+					<span class="font-weight-bold">이메일 주소</span>
+					<input type="text" name="eamil" class="form-control mt-2" placeholder="이메일 주소를 입력해주세요.">
+					<div class="d-flex justify-content-end ">
+						<input type="submit" value="회원가입" class="btn btn-info mt-5">
+					</div>
+				</form>
+				<!-- 이 위로는 건들지 말 것 -->
+			</div>
+		</div>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+	<script>
+		
+	</script>
+</th:block>
