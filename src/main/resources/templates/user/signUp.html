@@ -12,22 +12,23 @@
 				<form method="post" action="/user/sign-up">
 					<span class="font-weight-bold">아이디</span>
 					<div class="d-flex">
-						<input type="text" name="id" class="form-control mt-2" placeholder="아이디를 입력하세요.">
-						<button type="button" class="form-control btn btn-success mt-2 col-4">중복확인</button>
+						<input type="text" id="userId" name="userId" class="form-control mt-2" placeholder="아이디를 입력하세요.">
+						<button type="button" id="checkDuplicateBtn" class="form-control btn btn-success mt-2 col-4">중복확인</button>
 					</div>
-					<span class="textArea"></span>
+					<!-- 중복확인 문구 -->
+					<div id="duplicateMessage" class="text-danger d-none">이미 사용중인 아이디입니다.</div>
 					
 					<span class="font-weight-bold">비밀번호</span>
-					<input type="password" name="password" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
+					<input type="password" id="password" name="password" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
 				
 					<span class="font-weight-bold">비밀번호 확인</span>
-					<input type="password" name="passwordCheck" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
+					<input type="password" id="passwordCheck" name="passwordCheck" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
 				
 					<span class="font-weight-bold">이름</span>
-					<input type="text" name="name" class="form-control mt-2" placeholder="이름을 입력해주세요.">
+					<input type="text" id="name" name="name" class="form-control mt-2" placeholder="이름을 입력해주세요.">
 					
 					<span class="font-weight-bold">이메일 주소</span>
-					<input type="text" name="eamil" class="form-control mt-2" placeholder="이메일 주소를 입력해주세요.">
+					<input type="text" id="email" name="eamil" class="form-control mt-2" placeholder="이메일 주소를 입력해주세요.">
 					<div class="d-flex justify-content-end ">
 						<input type="submit" value="회원가입" class="btn btn-info mt-5">
 					</div>
@@ -40,6 +41,31 @@
 
 <th:block layout:fragment="script">
 	<script>
-		
+		$(document).ready(function() { // ready 함수 시작
+			// checkDuplicateBtn 클릭 이벤트 
+			$("#checkDuplicateBtn").on('click', function() { 
+				// alert("중간 점검");
+				// validation
+				let userId = $("#userId").val().trim();
+				// 유효성 검사
+				if (!userId) {
+					alert("아이디를 입력하세요.");					
+				}
+				$.ajax({
+					// response
+					type:"get"
+					,url:"이따가 UserRestController만들고 거기 requestMapping안에 들어갈 url주소"
+					,data: {"userId":userId}
+					// request
+					, success:function(data) {
+						
+					}
+					, error:function(error) {
+						
+					}
+				}); // ajax 끝.
+				
+			}); // checkDuplicateBtn 클릭 이벤트 끝.
+		}); // ready 함수 끝.
 	</script>
 </th:block>
