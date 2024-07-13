@@ -32,7 +32,7 @@ public class UserEntity {
 	private int id;
 	
 	@Column(name = "userId")
-	private int userId;
+	private String userId;
 	private String password;
 	private String name;
 	private String email;

@@ -17,6 +17,7 @@
 					</div>
 					<!-- 중복확인 문구 -->
 					<div id="duplicateMessage" class="text-danger d-none">이미 사용중인 아이디입니다.</div>
+					<div id="notDuplicateMessage" class="text-success d-none">사용가능한 아이디입니다.</div>
 					
 					<span class="font-weight-bold">비밀번호</span>
 					<input type="password" id="password" name="password" class="form-control mt-2" placeholder="비밀번호를 입력하세요.">
@@ -42,7 +43,7 @@
 <th:block layout:fragment="script">
 	<script>
 		$(document).ready(function() { // ready 함수 시작
-			// checkDuplicateBtn 클릭 이벤트 
+			// checkDuplicateBtn(중복검사) 클릭 이벤트 
 			$("#checkDuplicateBtn").on('click', function() { 
 				// alert("중간 점검");
 				// validation
@@ -53,19 +54,24 @@
 				}
 				$.ajax({
 					// response
-					type:"get"
-					,url:"이따가 UserRestController만들고 거기 requestMapping안에 들어갈 url주소"
+					type: "get"
+					,url: "/user/is-duplicated"
 					,data: {"userId":userId}
 					// request
 					, success:function(data) {
-						
+						if (data.code == 200) { // 중복이면
+							// duplicateMessage 노출 시키기
+							$("#duplicateMessage").removeClass("d-none");
+						} else if (data.code == 500) { // 중복이 아니면
+							// notDuplicateMessage 노출 시키기
+							$("#notDuplicateMessage").removeClass("d-none");
+						}
 					}
 					, error:function(error) {
-						
+						alert("서버상의 에러입니다.");
 					}
 				}); // ajax 끝.
-				
-			}); // checkDuplicateBtn 클릭 이벤트 끝.
+			}); // checkDuplicateBtn(중복확인) 클릭 이벤트 끝.
 		}); // ready 함수 끝.
 	</script>
 </th:block>
