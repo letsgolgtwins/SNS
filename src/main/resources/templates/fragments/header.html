@@ -7,8 +7,12 @@
 				<h1 class="ml-4">Marondalgram</h1>
 			</div>
 			<!-- 로그인 영역 -->
-			<div class="mr-4">
-				<h3><a href="#">로그인</a></h3>
+			<div class="mr-4" th:if="${session.userId != null}">
+				<h4 th:text="${session.userName} +'님 안녕하세요.'"></h4>
+				<h3><a href="/user/sign-out">로그아웃</a></h3>
+			</div>
+			<div class="mr-4" th:unless="${session.userId != null}">
+				<h3><a href="/user/sign-in">로그인</a></h3>
 			</div>
 		</div>
 	</header>

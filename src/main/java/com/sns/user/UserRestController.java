@@ -14,6 +14,9 @@ import com.sns.common.EncryptUtils;
 import com.sns.user.BO.UserBO;
 import com.sns.user.Entity.UserEntity;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RequestMapping("/user")
 @RestController
 public class UserRestController {
@@ -65,6 +68,35 @@ public class UserRestController {
 			map.put("message", "실패");
 		}
 		return map;
+	}
+	
+	// 로그인 - db에서 단 건 select
+	@PostMapping("/sign-in")
+	public Map<String, Object> signIn(
+			@RequestParam("userId") String userId,
+			@RequestParam("password") String password,
+			HttpServletRequest request) {
+		// hashing 처리
+		String hashedPassword = EncryptUtils.md5(password);
+		
+		// db에서 select
+		UserEntity user = userBO.getUserEntityByUserIdAndPassword(userId, hashedPassword);
+		
+		// 로그인 유지, 응답 JSON
+		Map<String, Object> result = new HashMap<>();
+		if (user != null) { // 즉, 로그인 완료
+			HttpSession session = request.getSession();
+			session.setAttribute("userLoginId", user.getId());
+			session.setAttribute("userId", user.getUserId());
+			session.setAttribute("userName", user.getName());
+			
+			result.put("code", 200);
+			result.put("result", "성공");
+		} else { // 즉, 로그인 실패
+			result.put("code", 403);
+			result.put("error_message", "로그인에 실패하였습니다.");
+		}
+		return result;
 	}
 	
 }

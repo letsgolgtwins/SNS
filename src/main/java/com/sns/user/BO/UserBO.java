@@ -12,7 +12,7 @@ public class UserBO {
 	@Autowired
 	private UserRepository userRepository;
 	
-	// 중복확인 API
+	// userId 중복확인 API
 	// i: String userId o: UserEntity
 	public UserEntity getUserEntityBuUserId(String UserId) {
 		return userRepository.findByUserId(UserId);
@@ -27,6 +27,11 @@ public class UserBO {
 				.email(email)
 				.build()
 				);
+	}
+	
+	// 로그인 - db에서 단 건 select
+	public UserEntity getUserEntityByUserIdAndPassword(String userId, String password) {
+		return userRepository.findByUserIdAndPassword(userId, password);
 	}
 	
 }

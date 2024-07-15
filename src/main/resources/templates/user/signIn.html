@@ -11,11 +11,11 @@
 			<div class="IdAndPwBox d-flex justify-content-center align-items-center m-5">
 				<!-- form -->
 				<form method="post" action="/user/sign-in">
-					<input type="text" name="id" class="insertId form-control mt-4" placeholder="아이디를 입력하세요.">
-					<input type="password" name="password" class="insertPw form-control mt-2" placeholder="암호를 입력하세요.">
+					<input type="text" id="userId" name="userId" class="insertId form-control mt-4" placeholder="아이디를 입력하세요.">
+					<input type="password" id="password" name="password" class="insertPw form-control mt-2" placeholder="암호를 입력하세요.">
 					<div class="d-flex justify-content-between">
-						<button type="button" class="btn btn-secondary col-5 mt-2">회원가입</button>
-						<input type="submit" value="로그인" class="btn btn-info col-5 mt-2">
+						<button type="button" id="signUpBtn" class="btn btn-secondary col-5 mt-2">회원가입</button>
+						<input type="submit" value="로그인" id="signInBtn" class="btn btn-info col-5 mt-2">
 					</div>
 				</form>
 				<!-- 이 위로는 건들지 말 것 -->
@@ -26,6 +26,49 @@
 
 <th:block layout:fragment="script">
 	<script>
-		
+		$(document).ready(function() { // ready 함수 시작
+			// signUpBtn 회원가입 버튼 클릭 이벤트
+			$("#signUpBtn").on('click', function() {
+				alert("회원가입 페이지로 이동합니다.");
+				location.href = "/user/sign-up-view"
+			}); // signUpBtn 회원가입 버튼 클릭 이벤트 끝.
+			
+			// form 시작
+			$("form").on('submit', function(e) {
+				// alert("중간점검");
+				e.preventDefault(); 
+				
+				// validation
+				let userId = $("#userId").val().trim();
+				let password = $("#password").val().trim();
+				// 유효성 검사
+				if (!userId) {
+					alert("아이디를 입력하세요.");
+					return false;
+				}
+				if (!password) {
+					alert("비밀번호를 입력하세요.");
+					return false;
+				}
+				
+				// url
+				let url = $(this).attr('action');
+				console.log(url);
+				// params serialize
+				let params = $(this).serialize();
+				console.log(params);
+
+				// ajax
+				$.post(url, params) // request
+				.done(function(data) {
+					if (data.code == 200) { // 로그인 성공
+						alert("로그인에 성공하였습니다. 타임라인 페이지로 이동합니다.");
+						location.href = "/timeline/timeline-view"
+					} else { // 로그인 실패
+						alert(data.error_message);
+					}
+				}); // ajax 끝.
+			}); // form 로그인 끝.
+		}); // ready 함수 끝.
 	</script>
 </th:block>
