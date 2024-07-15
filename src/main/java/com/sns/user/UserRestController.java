@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sns.common.EncryptUtils;
 import com.sns.user.BO.UserBO;
 import com.sns.user.Entity.UserEntity;
 
@@ -38,4 +40,31 @@ public class UserRestController {
 		}
 		return result;
 	}
+	
+	// 회원가입 - db에 insert
+	// /user/sign-up
+	@PostMapping("/sign-up")
+	public Map<String, Object> signUp(
+			@RequestParam("userId") String userId,
+			@RequestParam("password") String password,
+			@RequestParam("name") String name,
+			@RequestParam("email") String email) {
+		// MD5 암호화 
+		String hashedPassword = EncryptUtils.md5(password);
+		
+		// db에 insert
+		UserEntity user = userBO.addUserEntity(userId, hashedPassword, name, email);
+		
+		// 응답 JSON
+		Map<String, Object> map = new HashMap<>();
+		if (user != null) { // 회원가입 성공
+			map.put("code", 200);
+			map.put("message", "성공");
+		} else {
+			map.put("code", 500);
+			map.put("message", "실패");
+		}
+		return map;
+	}
+	
 }

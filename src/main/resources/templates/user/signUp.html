@@ -29,9 +29,10 @@
 					<input type="text" id="name" name="name" class="form-control mt-2" placeholder="이름을 입력해주세요.">
 					
 					<span class="font-weight-bold">이메일 주소</span>
-					<input type="text" id="email" name="eamil" class="form-control mt-2" placeholder="이메일 주소를 입력해주세요.">
+					<input type="text" id="email" name="email" class="form-control mt-2" placeholder="이메일 주소를 입력해주세요.">
+					
 					<div class="d-flex justify-content-end ">
-						<input type="submit" value="회원가입" class="btn btn-info mt-5">
+						<input type="submit" value="회원가입" id="signUpBtn" class="btn btn-info mt-5">
 					</div>
 				</form>
 				<!-- 이 위로는 건들지 말 것 -->
@@ -72,6 +73,64 @@
 					}
 				}); // ajax 끝.
 			}); // checkDuplicateBtn(중복확인) 클릭 이벤트 끝.
+			// signUpBtn 회원가입 버튼 클릭 이벤트
+			$("form").on('submit', function(e) {
+				// alert("중간점검");
+				// validation
+				let userId = $("#userId").val().trim();
+				let password = $("#password").val().trim();
+				let passwordCheck = $("#passwordCheck").val().trim();
+				let name = $("#name").val().trim();
+				let email = $("#email").val().trim();
+				console.log(userId);
+				console.log(password);
+				console.log(name);
+				console.log(email);
+				// 유효성 검사
+				if (!userId) {
+					alert("아이디를 입력해주세요.");
+					return false;
+				}
+				if (!password || !passwordCheck) {
+					alert("비밀번호를 입력해주세요.");
+					return false;
+				}
+				if (password != passwordCheck) {
+					alert("비밀번호가 일치하지 않습니다.");
+					return false;
+				}
+				if (!name) {
+					alert("이름을 입력해주세요.");
+					return false;
+				}
+				if (!email) {
+					alert("이메일을 입력해주세요.");
+					return false;
+				}
+				
+				// 사용가능 여부 alert
+				if ( $("#notDuplicateMessage").hasClass("d-none") ) {
+					alert("아이디 중복확인을 해주세여.");
+					return false;
+				}
+				
+ 				// 2) ajax로 호출 > response가 JSON
+				let url = $(this).attr("action");
+				console.log(url);
+				let params = $(this).serialize(); // form 탸그의 name 속성과 value를 파라미터로 구성.
+				console.log(params);
+				
+				// request
+				$.post(url, params) 
+				.done(function(data) {
+						if (data.code == 200) { // 회원가입 성공
+							alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
+							location.href = "/user/sign-in-view";
+						} else if (data.code == 500) {
+							alert("회원가입 실패.");
+						}
+				}); // ajax 끝.					
+			}); // signUpBtn 회원가입 버튼 클릭 이벤트 끝
 		}); // ready 함수 끝.
 	</script>
 </th:block>
