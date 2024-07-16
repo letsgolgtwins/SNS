@@ -3,12 +3,89 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/defaultLayout}">
-<section layout:fragment="content" class="contents d-flex justify-content-center">
+<section layout:fragment="content" class="contents">
 	<div class="d-flex">
-		<div class="left bg-warning"></div>
-		<div class="center bg-secondary">			
-		</div>
-		<div class="right bg-warning"></div>
+		<div class="contents-left bg-warning col-2"></div>
+		<div class="contents-center bg-secondary col-8">
+			
+			<!-- 글쓰기 영역 (로그인 상태에서만 보임) -->
+			<div class="writeBox border rounded m-3">
+				<textarea id="writeTextArea" class="w-100 border-0" placeholder="내용을 입력해주새요."></textarea>
+				<div class="d-flex justify-content-between">
+					<div class="file-upload d-flex">
+						<img alt="파일업로드이미지" width="35" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png">
+					</div>
+					<button id="uploadBtn" class="btn btn-info">업로드</button>
+				</div>
+			</div> <!-- 글쓰기 영역 끝. -->
+			
+			<!-- 타임라인 영역 -->
+			<div class="timeline-box">
+				<!-- 큰 틀 -->
+				<div class="card border rounded mt-3">
+					<!-- 글쓴이, ... -->
+					<div class="d-flex justify-content-between">
+						<span class="font-weight-bold">글쓴이</span>
+						
+						<!-- ...더보기 (로그인 된 사람과 글쓴이 정보 일치할 때 보이게) -->
+						<a href="#" class="more">
+							<img alt="더보기" width="30" src="https://www.iconninja.com/files/860/824/939/more-icon.png">
+						</a>
+					</div> <!-- 글쓴이, ...끝 -->
+					
+					<!-- 본문 이미지 -->
+					<div class="card-img">
+						<img alt="본문이미지" class="w-100" src="https://cdn.pixabay.com/photo/2024/06/23/06/27/lake-8847415_1280.jpg">
+					</div>
+					
+					<!-- 좋아요 -->
+					<div class="card-like m-3">
+						<img alt="빈좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
+						<span class="font-weight-bold" th:text="|좋아요 13개|"></span>
+					</div>
+					
+					<!-- 글 -->
+					<div class="card-post m-2">
+						<span class="font-weight-bold">글쓴이</span>
+						<span>글 내용</span>
+					</div>
+					
+					<!-- 댓글 상단 바 -->
+					<div class="card-comment-title border-bottom">
+						<div class="font-weight-bold ml-3 mb-1">댓글</div>
+					</div>
+					
+					<!-- 댓글& 댓글 달기 영역 -->
+					<div class="card-comment-area m-2">
+						<!-- 댓글들 -->
+						<div class="card-comment m-1">
+							<span class="font-weight-bold">lgtwinsbaseballclub</span>
+							<span>올해도 우리 엘지가 우승할 겁니다.</span><br>
+							<span class="font-weight-bold">lottegiantsbusan</span>
+							<span>뭔소리고 올해는 롯데가 우승이다 임마.</span><br>
+							<span class="font-weight-bold">always_kia_tigers</span>
+							<span>ㅋㅋㅋㅋ 올해는 최강기아가 우승이다.</span>
+							
+							<!-- 댓글 삭제 기능 X (당연히 자신이 쓴 댓글만 가능) -->
+							<a href="#" class="comment-del-btn">
+								<img alt="댓글삭제이미지X" width="10" height="10" src="https://www.iconninja.com/files/603/22/506/x-icon.png">
+							</a>
+							
+							<!-- 댓글 쓰기 -->
+							<div class="comment-write d-flex border-top mt-2">
+								<input type="text" class="comment-input form-control border-0 mr-2 col-10" placeholder="댓글 내용을 입력해주세요.">
+								<button type="button" class="comment-btn btn btn-light col-2">게시</button>
+							</div>
+						</div> 
+						<!-- 댓글들 끝. -->
+					</div>
+					<!-- 댓글& 댓글 달기 영역 끝. -->
+				</div>
+				<!-- 큰 틀 끝. -->
+			</div>
+			<!-- 타임라인 끝. -->
+		</div> <!-- contents-center 끝. -->
+		<div class="contents-right bg-warning col-2"></div>
 	</div>
 </section>
 
