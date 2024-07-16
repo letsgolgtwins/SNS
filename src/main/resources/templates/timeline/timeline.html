@@ -5,11 +5,11 @@
       layout:decorate="~{layout/defaultLayout}">
 <section layout:fragment="content" class="contents">
 	<div class="d-flex">
-		<div class="contents-left bg-warning col-2"></div>
-		<div class="contents-center bg-secondary col-8">
+		<div class="contents-left col-2"></div>
+		<div class="contents-center col-8">
 			
 			<!-- 글쓰기 영역 (로그인 상태에서만 보임) -->
-			<div class="writeBox border rounded m-3">
+			<div th:if="${session.userId != null}" class="writeBox border rounded m-3">
 				<textarea id="writeTextArea" class="w-100 border-0" placeholder="내용을 입력해주새요."></textarea>
 				<div class="d-flex justify-content-between">
 					<div class="file-upload d-flex">
@@ -22,10 +22,10 @@
 			<!-- 타임라인 영역 -->
 			<div class="timeline-box">
 				<!-- 큰 틀 -->
-				<div class="card border rounded mt-3">
+				<div th:each="post, status : ${postInfo}" class="card border rounded mt-3">
 					<!-- 글쓴이, ... -->
 					<div class="d-flex justify-content-between">
-						<span class="font-weight-bold">글쓴이</span>
+						<span class="font-weight-bold" th:text="${post.userId}">글쓴이</span>
 						
 						<!-- ...더보기 (로그인 된 사람과 글쓴이 정보 일치할 때 보이게) -->
 						<a href="#" class="more">
@@ -35,7 +35,7 @@
 					
 					<!-- 본문 이미지 -->
 					<div class="card-img">
-						<img alt="본문이미지" class="w-100" src="https://cdn.pixabay.com/photo/2024/06/23/06/27/lake-8847415_1280.jpg">
+						<img alt="본문이미지" class="contentsImage w-100" th:src="${post.imagePath}">
 					</div>
 					
 					<!-- 좋아요 -->
@@ -46,8 +46,8 @@
 					
 					<!-- 글 -->
 					<div class="card-post m-2">
-						<span class="font-weight-bold">글쓴이</span>
-						<span>글 내용</span>
+						<span class="font-weight-bold" th:text="${post.userId}">글쓴이</span>
+						<span th:text="${post.content}">글 내용</span>
 					</div>
 					
 					<!-- 댓글 상단 바 -->
@@ -85,7 +85,7 @@
 			</div>
 			<!-- 타임라인 끝. -->
 		</div> <!-- contents-center 끝. -->
-		<div class="contents-right bg-warning col-2"></div>
+		<div class="contents-right col-2"></div>
 	</div>
 </section>
 

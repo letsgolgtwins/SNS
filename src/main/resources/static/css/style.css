@@ -9,4 +9,5 @@ header {height: 100px}
 
 .contents-left, .contents-center, .contents-right {min-height: 600px}
 #writeTextArea {height: 100px}
+.contentsImage {height: 400px}
 

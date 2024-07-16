@@ -86,8 +86,8 @@ public class UserRestController {
 		Map<String, Object> result = new HashMap<>();
 		if (user != null) { // 즉, 로그인 완료
 			HttpSession session = request.getSession();
-			session.setAttribute("userLoginId", user.getId());
-			session.setAttribute("userId", user.getUserId());
+			session.setAttribute("userId", user.getId());
+			session.setAttribute("userLoginId", user.getUserId());
 			session.setAttribute("userName", user.getName());
 			
 			result.put("code", 200);
