@@ -23,7 +23,7 @@ public class TimeLineController {
 	// 타임라인 페이지 and db에서 컨텐츠 가져오기 select
 	// http://localhost:8080/timeline/timeline-view
 	@GetMapping("/timeline/timeline-view")
-	public String timeLineView(/*HttpSession session,*/ Model model) {
+	public String timeLineView(/*필요없음 HttpSession session,*/ Model model) {
 		// 로그인 여부 확인 - 필요없다.
 //		Integer userId = (Integer) session.getAttribute("userId");
 //		if (userId == null) { // 로그인이 안되어 있는 경우
