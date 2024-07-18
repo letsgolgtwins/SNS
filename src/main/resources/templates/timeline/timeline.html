@@ -5,17 +5,24 @@
       layout:decorate="~{layout/defaultLayout}">
 <section layout:fragment="content" class="contents">
 	<div class="d-flex">
-		<div class="contents-left col-2"></div>
-		<div class="contents-center col-8">
+		<div class="contents-left col-3"></div>
+		<div class="contents-center col-6">
 			
 			<!-- 글쓰기 영역 (로그인 상태에서만 보임) -->
 			<div th:if="${session.userId != null}" class="writeBox border rounded m-3">
 				<textarea id="writeTextArea" class="w-100 border-0" placeholder="내용을 입력해주새요."></textarea>
 				<div class="d-flex justify-content-between">
 					<div class="file-upload d-flex">
-						<img alt="파일업로드이미지" width="35" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png">
+						<!-- file업로드 는 d-none으로 숨겨두고 이미지를 클릭하면 file업로드를 클릭한 것과 같은 효과를 주게끔 만들어줘야 함. -->
+						<input type="file" id="file" accept=".jpg, .png, .gif" class="d-none">
+						
+						<!-- a태그로 감싼 이유는 이미지 위에 마우스 커서 올리면 커서가 link로 바뀌게끔 -->
+						<a href="#" id="fileUploadBtn"><img alt="파일업로드이미지" width="35" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png"></a> 
+					
+						<!-- 파일업로드 사진a태그 옆에 파일명 나타나게끔 하는 글 상자 -->
+						<div id="fileName" class="pl-1 pt-1"></div>
 					</div>
-					<button id="uploadBtn" class="btn btn-info">업로드</button>
+					<input type="submit" id="uploadBtn" class="btn btn-info" value="업로드">
 				</div>
 			</div> <!-- 글쓰기 영역 끝. -->
 			
@@ -85,12 +92,112 @@
 			</div>
 			<!-- 타임라인 끝. -->
 		</div> <!-- contents-center 끝. -->
-		<div class="contents-right col-2"></div>
+		<div class="contents-right col-3"></div>
 	</div>
 </section>
 
 <th:block layout:fragment="script">
     <script>
+		$(document).ready(function() {
+			// fileUploadBtn (이미지) a태그 클릭 => 숨겨져 있는 id="file" 태그 동작 시킴.
+			$("#fileUploadBtn").on('click', function(e) {
+				e.preventDefault(); // 위로 올라가는 현상 방지
+				// alert("중간점검");
+				
+				$("#file").click(); // input type="file" 클릭한 것과 동일.
+			}); // fileUploadBtn 클릭 이벤트 끝.
+			
+			// 실제 파일이 선택될 때(= 변경 될 때), 파일명을 사진a태그 옆에 노출시키기& 선택된 파일이 이미지인지 유효성 체크까지
+			$("#file").on('change', function(e) {
+				// 취소를 누를 때 파일이 비워지므로 .name에서 에러 발생
+				let file = e.target.files[0];
+				if (file == null) {
+					$("#file").val("");
+					$("#fileName").text("");
+					return;
+				}
+				
+				// alert("중간점검");
+				let fileName = e.target.files[0].name; // target이 this와 같음. 그리고 첫번쨰(0번째) 가져오기
+				console.log(fileName); // athletes-1835893_1280.jpg
+				
+				// 확장자 validation 
+				let extension = fileName.split(".").pop().toLowerCase();
+				console.log(extension); // 중간점점 
+				
+				// 유효성 체크 (memo에서 처럼 $.inArray를 쓸 수 있지만 이번엔 다른 더 직관적인 방법.)
+				if (extension != "gif" && extension != "png" && extension != "jpg") {
+					alert("이미지 파일만 업로드 할 수 있습니다.");
+					$("#file").val(""); // 이전에 파일 태그에 올라온 파일 초기화(제거)
+					$("#fileName").text(""); // 이전에 선택해서 옆에 이름 뜨는 것도 초기화(제거)
+					return;
+				}
+				
+				// 파일명 노출 (유효성 체크를 통과한 애들)
+				$("#fileName").text(fileName); // 위에 만들어둔 것.
+			}); // 실제 파일이 선택될 때(변경 될 때) 이벤트 끝.
+			
+			// 여기서부터 2교시 나혼자 ~
+			// uploadBtn 업로드 버튼 클릭 이벤트
+			$("#uploadBtn").on('click', function() {
+				// alert("중간점검");
+				// 로그인 여부 확인 - 이건 이따 해설 듣겠다.
 
+				e.preventDefault();
+				// validation
+				let content = $("#writeTextArea").val();
+				let fileFullName = $("#file").val();
+				
+				console.log(writeTextArea);
+				console.log(fileFullName); 
+					
+				// 유효성 체크 - writeTextArea(content)는 null하용이므로 안해줌
+				if (fileFullName != null) {
+					alert("사진을 업로드해주세요.");
+					return;
+				}
+				
+				if (fileFullName) { // fileFullName이 존재한다면
+					let extension =	fileFullName.split(".").pop.toLowerCase();
+					console.log(extension); // 파일확장자명만 띄우기
+					
+					if (extension != "gif" && extension != "png" && extension != "gif" ) {
+						alert("확장자를 확인해주세요.");
+						$("#file").val("");
+						return;
+					}
+				}
+				
+				// 폼태그 자바스크립트에서 만들기
+				// formData 
+				let formData = new formData();
+				formData.append("content", content); // 글
+				formData.append("file", $("#file")[0].files[0]); // 사진
+					
+				$.ajax({
+					// response
+					type: "post"
+					, url: "/post/create"
+					, data: formData
+					, enctype: "multiPart/form-data"
+					, processData: false
+					, contentType: false
+					
+					// request
+					, success:function(data) {
+						if (data.code == 200) {
+							location.reload();
+						} else if (data.code == 403) { // 비로그인 상황
+							location.href = "/user/sign-in-view"
+						} else {
+							alert(error_message);
+						}
+					}
+					, error:function(e) {
+						alert("서버상의 에러입니다.");
+					}
+				}); // AJAX 끝.
+			}); // uploadBtn 업로드 버튼 클릭 이벤트 끝.
+		}); // ready 함수 끝.
     </script>
 </th:block>
