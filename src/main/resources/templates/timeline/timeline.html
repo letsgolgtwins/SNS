@@ -11,6 +11,7 @@
 			<!-- 글쓰기 영역 (로그인 상태에서만 보임) -->
 			<div th:if="${session.userId != null}" class="writeBox border rounded m-3">
 				<textarea id="writeTextArea" class="w-100 border-0" placeholder="내용을 입력해주새요."></textarea>
+				
 				<div class="d-flex justify-content-between">
 					<div class="file-upload d-flex">
 						<!-- file업로드 는 d-none으로 숨겨두고 이미지를 클릭하면 file업로드를 클릭한 것과 같은 효과를 주게끔 만들어줘야 함. -->
@@ -141,31 +142,27 @@
 			// uploadBtn 업로드 버튼 클릭 이벤트
 			$("#uploadBtn").on('click', function() {
 				// alert("중간점검");
-				// 로그인 여부 확인 - 이건 이따 해설 듣겠다.
 
 				e.preventDefault();
 				// validation
 				let content = $("#writeTextArea").val();
-				let fileFullName = $("#file").val();
-				
+				let file = $("#file").val();
 				console.log(writeTextArea);
-				console.log(fileFullName); 
+				console.log(file); 
 					
 				// 유효성 체크 - writeTextArea(content)는 null하용이므로 안해줌
-				if (fileFullName != null) {
+				if (file != null) { // 선생님 답안엔 file == '' 으로 되어있음.
 					alert("사진을 업로드해주세요.");
 					return;
 				}
 				
-				if (fileFullName) { // fileFullName이 존재한다면
-					let extension =	fileFullName.split(".").pop.toLowerCase();
-					console.log(extension); // 파일확장자명만 띄우기
-					
-					if (extension != "gif" && extension != "png" && extension != "gif" ) {
-						alert("확장자를 확인해주세요.");
-						$("#file").val("");
-						return;
-					}
+				// 파일 확장자명 추출
+				let extension =	file.split(".").pop.toLowerCase();
+				
+				if (extension != "jpg" && extension != "png" && extension != "gif") { // 					
+					alert("확장자를 확인해주세요.");
+					$("#file").val(''); // 파일 비우기
+					return;
 				}
 				
 				// 폼태그 자바스크립트에서 만들기
@@ -174,6 +171,7 @@
 				formData.append("content", content); // 글
 				formData.append("file", $("#file")[0].files[0]); // 사진
 					
+				// AJAX
 				$.ajax({
 					// response
 					type: "post"
