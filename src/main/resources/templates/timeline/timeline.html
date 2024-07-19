@@ -66,13 +66,15 @@
 					<!-- 댓글& 댓글 달기 영역 -->
 					<div class="card-comment-area m-2">
 						<!-- 댓글들 -->
-						<div class="card-comment m-1">
-							<span class="font-weight-bold">lgtwinsbaseballclub</span>
-							<span>올해도 우리 엘지가 우승할 겁니다.</span><br>
+						<div class="card-comment m-1" th:each="comment, status : ${commentInfo}">
+							<span class="font-weight-bold" th:text="${comment.userLoginId}">lgtwinsbaseballclub</span>
+							<span th:text="${comment.comment}">올해도 우리 엘지가 우승할 겁니다.</span><br>
+							<!-- 
 							<span class="font-weight-bold">lottegiantsbusan</span>
 							<span>뭔소리고 올해는 롯데가 우승이다 임마.</span><br>
 							<span class="font-weight-bold">always_kia_tigers</span>
-							<span>ㅋㅋㅋㅋ 올해는 최강기아가 우승이다.</span>
+							<span>ㅋㅋㅋㅋ 올해는 최강기아가 우승이다.</span> 
+							-->
 							
 							<!-- 댓글 삭제 기능 X (당연히 자신이 쓴 댓글만 가능) -->
 							<a href="#" class="comment-del-btn">
@@ -81,8 +83,8 @@
 							
 							<!-- 댓글 쓰기 -->
 							<div class="comment-write d-flex border-top mt-2">
-								<input type="text" class="comment-input form-control border-0 mr-2 col-10" placeholder="댓글 내용을 입력해주세요.">
-								<button type="button" class="comment-btn btn btn-light col-2">게시</button>
+								<input type="text" name="comment" class="comment-input form-control border-0 mr-2 col-10" placeholder="댓글 내용을 입력해주세요.">
+								<button type="button" th:data-post-id="${commentInfo.id}" th:data-user-id="${session.userId}" class="comment-btn btn btn-light col-2">게시</button>
 							</div>
 						</div> 
 						<!-- 댓글들 끝. -->
@@ -196,6 +198,60 @@
 					}
 				}); // AJAX 끝.
 			}); // uploadBtn 업로드 버튼 클릭 이벤트 끝.
+			
+			// comment-btn 댓글게시 버튼 클릭 이벤트
+			$(".comment-btn").on('click', function() {
+
+				// 로그인 상태인지, 비로그인 상태인지 판별 by session.userId 
+				let userId = $(this).data("user-id");
+				if (!userId) { // userId가 비어있다면 즉, 비로그인이라면
+					alert("로그인을 해주세요.");
+					return;
+				}
+				
+				let postId = $(this).data("post-id");
+				// alert("중간점검");
+
+				// validation
+				let comment = $("#comment-input").val();
+				
+				// 유효성 검사(댓글은 not null 이므로)
+				if (!comment) {
+					alert("댓글을 입력하세요.");
+					return;
+				}		
+				
+				// 이전 태그값 가져오기 
+				// 1번째 방법
+				// let content = $(this).prev().val().trim();
+				// console.log(content);
+				
+				// 2번째 방법 - 형제 태그중 input값 가져오기 
+				let content = $(this).siblings("input").val().trim(); // "태그의 이름" 
+				console.log(content);
+				
+				// AJAX
+				$.ajax({
+					// request
+					type: "post"
+					, url: "/comment/create"
+					, data: {"postId":postId, "comment":comment}
+					// response
+					, success:function(data) {
+						if (data.code == 200) {
+							location.reload(true); // 새로고침 됨으로써 댓글이 달리고 스크롤은 제자리 유지.
+						} else if (data.code == 403) {
+							alert(data.error_message + "로그인 해주세요.");
+							location.href = "/user/sign-in-view"
+						} else {
+							alert(data.error_message);
+						}
+					}
+					, error:function(error) {
+						alert("서버상의 오류입니다.");
+					}
+				}); // AJAX 끝.
+			}); // comment-btn 댓글게시 버튼 클릭 이벤트 끝.
 		}); // ready 함수 끝.
     </script>
 </th:block>

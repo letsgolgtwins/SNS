@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.sns.comment.Mapper.CommentMapper">
+	<!-- 댓글 쓰기 - db에 insert --> 
+	<insert id="insertCommentByUserId" parameterType="map">
+		INSERT INTO `comment`
+		(
+			`commentId`
+			,`postId`
+			,`comment`
+			,`createdAt`
+			,`updatedAt`
+		)
+		VALUES
+		(	 
+			#{userId} <!-- 긴가민가 -->
+			, #{postId} <!-- user의 content -->
+			, #{comment}
+			, NOW()
+			, NOW()
+		)
+	</insert>
+	
+	<!-- 댓글 불러오기 - db에서 select -->
+	<select id="selectCommentListByPostId" resultType="com.sns.comment.domain.Comment">
+		SELECT 
+			`id`
+			,`commentId`
+			,`postId`
+			,`comment`
+			,`createdAt`
+			,`updatedAt`
+		FROM 
+			`comment`
+		WHERE
+	</select>
+ </mapper>
