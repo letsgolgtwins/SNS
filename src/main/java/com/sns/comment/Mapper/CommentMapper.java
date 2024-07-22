@@ -11,7 +11,7 @@ import com.sns.comment.domain.Comment;
 public interface CommentMapper {
 
 	// 댓글 쓰기 - db에 insert
-	public void insertCommentByUserId(
+	public int insertComment(
 			@Param("comment") String comment, 
 			@Param("postId") int postId, 
 			@Param("userId") int userId

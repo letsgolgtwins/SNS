@@ -16,7 +16,7 @@ public class CommentBO {
 	
 	// 댓글 쓰기 - db에 insert
 	public void addComment(String comment, int postId, int userId) {
-		commentMapper.insertCommentByUserId(comment, postId, userId);
+		commentMapper.insertComment(comment, postId, userId);
 	}
 	
 	// 댓글 가져오기 - db에서 select

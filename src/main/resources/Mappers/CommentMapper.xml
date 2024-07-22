@@ -4,7 +4,7 @@
  
  <mapper namespace="com.sns.comment.Mapper.CommentMapper">
 	<!-- 댓글 쓰기 - db에 insert --> 
-	<insert id="insertCommentByUserId" parameterType="map">
+	<insert id="insertComment" parameterType="map">
 		INSERT INTO `comment`
 		(
 			`commentId`
@@ -15,7 +15,7 @@
 		)
 		VALUES
 		(	 
-			#{userId} <!-- 긴가민가 -->
+			#{userId} <!-- 댓글 단 유저의 Id(user테이블의 PK) -->
 			, #{postId} <!-- user의 content -->
 			, #{comment}
 			, NOW()
