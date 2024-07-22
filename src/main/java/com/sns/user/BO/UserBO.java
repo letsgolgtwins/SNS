@@ -34,4 +34,9 @@ public class UserBO {
 		return userRepository.findByUserIdAndPassword(userId, password);
 	}
 	
+	// id(pk)가지고 조회하는 메소드
+	public UserEntity getUserEntityById(int userId) { // pk가지고 조회
+		return userRepository.findById(userId).orElse(null); // orElse(null) 없으면 null로 return
+	}
+	
 }

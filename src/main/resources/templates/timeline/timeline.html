@@ -31,20 +31,23 @@
 			<div class="timeline-box">
 				
 				<!-- 큰 틀 -->
-				<div th:each="post, status : ${postInfo}" class="card border rounded mt-3">
+				<!-- <div th:each="post, status : ${postInfo}" class="card border rounded mt-3"> -->
+				<div th:each="cardView, status : ${cardViewList}" class="card border rounded mt-3">
 					<!-- 글쓴이, ... -->
 					<div class="d-flex justify-content-between">
-						<span class="font-weight-bold" th:text="${post.userId}">글쓴이</span>
+						<!-- <span class="font-weight-bold" th:text="${post.userId}">글쓴이</span> -->
+						<span class="font-weight-bold" th:text="${cardView.user.userId}">글쓴이</span>
 						
 						<!-- ...더보기 (로그인 된 사람과 글쓴이 정보 일치할 때 보이게) -->
-						<a th:if="${session.userId == post.userId}" href="#" class="more-btn">
+						<a th:if="${session.userId == cardView.post.userId}" href="#" class="more-btn">
 							<img alt="더보기" width="30" src="https://www.iconninja.com/files/860/824/939/more-icon.png">
 						</a>
 					</div> <!-- 글쓴이, ...끝 -->
 					
 					<!-- 본문 이미지 -->
 					<div class="card-img">
-						<img alt="본문이미지" class="contentsImage w-100" th:src="${post.imagePath}">
+						<!-- <img alt="본문이미지" class="contentsImage w-100" th:src="${post.imagePath}"> -->
+						<img alt="본문이미지" class="contentsImage w-100" th:src="${cardView.post.imagePath}">
 					</div>
 					
 					<!-- 좋아요 -->
@@ -55,8 +58,10 @@
 					
 					<!-- 글 -->
 					<div class="card-post m-2">
-						<span class="font-weight-bold" th:text="${post.userId}">글쓴이</span>
-						<span th:text="${post.content}">글 내용</span>
+						<!-- <span class="font-weight-bold" th:text="${post.userId}">글쓴이</span>
+						<span th:text="${post.content}">글 내용</span> -->
+						<span class="font-weight-bold" th:text="${cardView.user.userId}">글쓴이</span>
+						<span th:text="${cardView.post.content}">글 내용</span>
 					</div>
 					
 					<!-- 댓글 상단 바 -->
@@ -67,14 +72,10 @@
 					<!-- 댓글& 댓글 달기 영역 -->
 					<div class="card-comment-area m-2">
 						<!-- 댓글들 -->
-						<div class="card-comment m-1" th:each="comment, status : ${commentInfo}">
+						<div class="card-comment m-1" th:each="commentView, status : ${cardView.commentList}">
 							
-							<span class="font-weight-bold" th:text="${comment.?}">댓글쓴이</span>
-							<span th:text="${comment.comment}">댓글 내용</span><br> 
-							
-							<!-- 예시 -->
-							<span class="font-weight-bold">lgtwinsbaseballclub</span>
-							<span>올해도 LG 트윈스가 우승할 겁니다.</span><br>
+							<span class="font-weight-bold" th:text="${commentView.user.userId}">댓글쓴이</span>
+							<span th:text="${commentView.comment.comment}">댓글 내용</span><br> 
 							
 							<!-- 댓글 삭제 기능 X (당연히 자신이 쓴 댓글만 가능) -->
 							<a href="#" class="comment-del-btn">
@@ -84,7 +85,7 @@
 							<!-- 댓글 쓰기 -->
 							<div class="comment-write d-flex border-top mt-2">
 								<input type="text" name="comment" class="comment-input form-control border-0 mr-2 col-10" placeholder="댓글 내용을 입력해주세요.">
-								<button type="button" th:data-post-id="${post.id}" th:data-user-id="${session.userId}" class="comment-btn btn btn-light col-2">게시</button>
+								<button type="button" th:data-post-id="${cardView.post.id}" th:data-user-id="${session.userId}" class="comment-btn btn btn-light col-2">게시</button>
 							</div>
 						</div> 
 						<!-- 댓글들 끝. -->

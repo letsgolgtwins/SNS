@@ -29,6 +29,6 @@ public class CommentController {
 		// model에 담기
 		model.addAttribute("commentInfo", commentList);
 
-		return "음";
+		return commentList;
 	}
 }

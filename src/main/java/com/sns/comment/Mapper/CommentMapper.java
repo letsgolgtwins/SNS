@@ -17,6 +17,9 @@ public interface CommentMapper {
 			@Param("userId") int userId
 			);
 	
-	// 댓글 불러오기 - db에서 select
+	// i) 댓글 불러오기 - db에서 select
+	public List<Comment> selectCommentList();
+	
+	// ii) 댓글 불러오기 - db에서 select
 	public List<Comment> selectCommentListByPostId(int postId);
 }
