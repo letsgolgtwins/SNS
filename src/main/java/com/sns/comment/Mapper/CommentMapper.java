@@ -22,4 +22,7 @@ public interface CommentMapper {
 	
 	// ii) 댓글 불러오기 - db에서 select
 	public List<Comment> selectCommentListByPostId(int postId);
+	
+	// 댓글 삭제
+	public void deleteCommentById(int id);
 }

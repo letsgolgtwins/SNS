@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sns.comment.BO.CommentBO;
 import com.sns.comment.domain.CommentView;
+import com.sns.like.BO.LikeBO;
 import com.sns.post.BO.PostBO;
 import com.sns.post.Entity.PostEntity;
 import com.sns.timeline.domain.CardView;
@@ -28,6 +29,10 @@ public class TimeLineBO {
 	// commentBO 가져오기
 	@Autowired
 	private CommentBO commentBO;
+	
+	// likeBO 가져오기
+	@Autowired
+	private LikeBO likeBO;
 	
 	// i: X / o: list<CardView>
 	public List<CardView> generateCardViewList() { // view에 뿌리기 위해서 '가공'이되는 메소드명은 보통 get보단 generate를 앞에 붙인다.
@@ -55,6 +60,11 @@ public class TimeLineBO {
 			// 댓글을 카드에 넣는다.
 			card.setCommentList(commentViewList);
 			
+			// 좋아요 개수
+			likeBO.
+			card.setLikeCount();
+			
+			// 좋아요 여부 
 			
 			
 			// !!!반드시 list에 넣는다.

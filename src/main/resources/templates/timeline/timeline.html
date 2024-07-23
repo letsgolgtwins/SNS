@@ -52,7 +52,10 @@
 					
 					<!-- 좋아요 -->
 					<div class="card-like m-3">
-						<img alt="빈좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
+						<a href="#" class="like-btn" th:data-post-id="${cardView.post.id}">
+							<img alt="빈좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
+							<img alt="좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
+						</a>
 						<span class="font-weight-bold" th:text="|좋아요 13개|"></span>
 					</div>
 					
@@ -78,7 +81,7 @@
 							<span th:text="${commentView.comment.comment}">댓글 내용</span><br> 
 							
 							<!-- 댓글 삭제 기능 X (당연히 자신이 쓴 댓글만 가능) -->
-							<a href="#" class="comment-del-btn">
+							<a href="#" class="comment-del-btn" th:if="${session.userId == commentView.comment.commentId}" th:data-comment-id="${commentView.comment.id}">
 								<img alt="댓글삭제이미지X" width="10" height="10" src="https://www.iconninja.com/files/603/22/506/x-icon.png">
 							</a>
 							
@@ -253,6 +256,59 @@
 					}
 				}); // AJAX 끝.
 			}); // comment-btn 댓글게시 버튼 클릭 이벤트 끝.
+			
+			// comment-del-btn(댓글 삭제) 클릭 이벤트
+			$(".comment-del-btn").on('click', function(e) {
+				e.preventDefault(); // 위로 올라감 방지
+				
+				let commentId = $(this).data("comment-id");
+				//alert(commentId);
+				
+				$.ajax({
+					type:"DELETE"
+					, url:"/comment/delete"
+					, data:{"commentId":commentId}
+					, success:function(data) {
+						if (data.code == 200) {
+							location.reload(true);
+						} else {
+							alert(data.error_message);
+						}
+					}
+					, error:function(request, status, error) {
+						alert("댓글 삭제 하는데 실패했습니다.");
+					}
+				}); // AJAX 끝
+			}); // comment-del-btn(댓글 삭제) 클릭 이벤트 끝.
+			
+			// like-btn (좋아요) 아이콘 클릭 이벤트
+			$(".like-btn").on('click', function(e) {
+				// alert("중간점검");
+				e.preventDafault(); // 위로 올라감 방지
+				
+				// 글 번호
+				let postId = $(this).val("post-id");
+				alert(postId);
+				
+				$.ajax({
+					// request
+					// type: "get" // get 또는 post 둘 중 하나 선택 
+					 url: "/like/" + postId
+					// , data:{"postId":postId}
+					// response
+					, success:function(data) {
+						if (data.code == 200) {
+							location.reload(true); // 새로고침	 => 타임라인 화면에 뿌려질 때 하트 여부 나타냄
+						} else if (data.code == 403) {
+							alert("로그인 상태가 아닙니다.");
+							location.href = "/user/sign-in-view";
+						} 
+					}
+					, error:function(e) {
+						alert("서버상의 에러입니다.");
+					}
+				}); // AJAX 끝.
+			}); // like-btn (좋아요) 아이콘 클릭 이벤트 끝.
 		}); // ready 함수 끝.
     </script>
 </th:block>

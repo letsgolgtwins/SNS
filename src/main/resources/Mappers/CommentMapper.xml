@@ -50,4 +50,13 @@
 		WHERE
 			`postId` = #{postId}
 	</select>
+	
+	<!-- 댓글 삭제 - db에서 delete -->
+	<delete id="deleteCommentById" parameterType="int">
+		DELETE
+		FROM	
+			`comment`
+		WHERE
+			`id` =  #{id}
+	</delete>
  </mapper>

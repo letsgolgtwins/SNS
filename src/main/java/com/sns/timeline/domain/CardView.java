@@ -24,6 +24,8 @@ public class CardView { // View에 뿌리기위한 domain이란 의미
 	private List<CommentView> commentList;
 	
 	// 좋아요 n개
+	private int likeCount;
 	
 	// 좋아요를 내가 눌렀는 지 여부
+	private boolean filledLike; 
 }
