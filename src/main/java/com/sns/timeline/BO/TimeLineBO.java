@@ -34,8 +34,8 @@ public class TimeLineBO {
 	@Autowired
 	private LikeBO likeBO;
 	
-	// i: X / o: list<CardView>
-	public List<CardView> generateCardViewList() { // view에 뿌리기 위해서 '가공'이되는 메소드명은 보통 get보단 generate를 앞에 붙인다.
+	// i: userId(로그인 된 사람 번호) / o: list<CardView>
+	public List<CardView> generateCardViewList(Integer userId) { // view에 뿌리기 위해서 '가공'이되는 메소드명은 보통 get보단 generate를 앞에 붙인다.
 		List<CardView> cardViewList = new ArrayList<>();
 		
 		// 글 목록을 가져온다. List<PostEntity> 
@@ -61,11 +61,11 @@ public class TimeLineBO {
 			card.setCommentList(commentViewList);
 			
 			// 좋아요 개수
-			likeBO.
-			card.setLikeCount();
+			int likeCount = likeBO.getLikeCountByPostId(post.getId());
+			card.setLikeCount(likeCount);
 			
 			// 좋아요 여부 
-			
+			card.setFilledLike(likeBO.filledLikeByPostIdAndUserId(post.getId(), userId));
 			
 			// !!!반드시 list에 넣는다.
 			cardViewList.add(card);

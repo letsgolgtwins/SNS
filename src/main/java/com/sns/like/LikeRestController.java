@@ -21,12 +21,13 @@ public class LikeRestController {
 	// GET: /like?postId=13 @RequestParam("postId")
 	// GET: /like/13 @PathVariable
 	@RequestMapping("/like/{postId}")
-	public Map<String, Object> likeToggle(@PathVariable(name = "postId") int postId, HttpSession session) {
-		Map<String, Object> result = new HashMap<>();
+	public Map<String, Object> likeToggle(
+			@PathVariable(name = "postId") int postId, 
+			HttpSession session) {
 		
 		// 로그인 여부 확인
+		Map<String, Object> result = new HashMap<>();
 		Integer userId = (Integer) session.getAttribute("userId");
-
 		if (userId == null) { // 로그인이 안되어있는 겨우
 			result.put("code", 403);
 			result.put("error_message", "로그인을 해주세요.");
@@ -39,6 +40,7 @@ public class LikeRestController {
 		// 성공 응답
 		result.put("code", 200);
 		result.put("result", "성공");
+		return result;
 	}
 	
 }

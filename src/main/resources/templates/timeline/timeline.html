@@ -39,7 +39,7 @@
 						<span class="font-weight-bold" th:text="${cardView.user.userId}">글쓴이</span>
 						
 						<!-- ...더보기 (로그인 된 사람과 글쓴이 정보 일치할 때 보이게) -->
-						<a th:if="${session.userId == cardView.post.userId}" href="#" class="more-btn">
+						<a th:if="${session.userId == cardView.post.userId}" href="#" class="more-btn" th:data-post-id="${cardView.post.id}" data-toggle="modal" data-target="modal">
 							<img alt="더보기" width="30" src="https://www.iconninja.com/files/860/824/939/more-icon.png">
 						</a>
 					</div> <!-- 글쓴이, ...끝 -->
@@ -53,10 +53,11 @@
 					<!-- 좋아요 -->
 					<div class="card-like m-3">
 						<a href="#" class="like-btn" th:data-post-id="${cardView.post.id}">
-							<img alt="빈좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
-							<img alt="좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
+							<img th:if="${cardView.filledLike == false}" alt="빈좋아요" width="18" height="18" src="https://www.iconninja.com/files/214/518/441/heart-icon.png">
+							<img th:unless="${cardView.filledLike == false}" alt="좋아요" width="18" height="18" src="https://www.iconninja.com/files/527/809/128/heart-icon.png">
 						</a>
-						<span class="font-weight-bold" th:text="|좋아요 13개|"></span>
+						<span class="font-weight-bold" th:text="${cardView.likeCount}">n</span>
+						<span>개</span>
 					</div>
 					
 					<!-- 글 -->
@@ -100,6 +101,22 @@
 			<!-- 타임라인 끝. -->
 		</div> <!-- contents-center 끝. -->
 		<div class="contents-right col-3"></div>
+
+		<!-- Modal: 타임리프 레이아웃 때문에 section 태그 안쪽에 위치 -->
+		<div class="modal fade" id="modal">
+			<!-- modal-sm: 작은 모달창, modal-dialog-centered: 수직/가운데 모달창 -->
+			<div class="modal-dialog modal-sm modal-dialog-centered">
+				<div class="modal-content text-center">
+		  			<div class="py-3">
+		  				<a href="#" id="postDeleteBtn">삭제하기</a>	
+		  			</div>
+		  			<div class="py-3 border-top">
+		  				<a href="#" data-dismiss="modal">취소</a>	
+		  			</div>
+				</div>
+			</div>
+		</div> <!-- Modal 끝. -->
+			
 	</div>
 </section>
 
@@ -281,14 +298,14 @@
 				}); // AJAX 끝
 			}); // comment-del-btn(댓글 삭제) 클릭 이벤트 끝.
 			
-			// like-btn (좋아요) 아이콘 클릭 이벤트
+			// like-btn (좋아요) 아이콘 클릭 이벤트 toggle
 			$(".like-btn").on('click', function(e) {
 				// alert("중간점검");
-				e.preventDafault(); // 위로 올라감 방지
+				e.preventDefault(); // 위로 올라감 방지
 				
 				// 글 번호
-				let postId = $(this).val("post-id");
-				alert(postId);
+				let postId = $(this).data("post-id");
+				// alert(postId);
 				
 				$.ajax({
 					// request
@@ -305,10 +322,31 @@
 						} 
 					}
 					, error:function(e) {
-						alert("서버상의 에러입니다.");
+						alert("서버상의 에러입니다ㅋㅋ");
 					}
 				}); // AJAX 끝.
 			}); // like-btn (좋아요) 아이콘 클릭 이벤트 끝.
+			
+			// 더보기(...) more-btn 클릭 이벤트 => Modal 띄우기, Modal에 글 번호 심어놓기
+			$(".more-btn").on('click', function(e) {
+				e.preventDafault();
+				
+				let postId = $(this).data('post-id'); // getting
+				// alert(postId); 중간점검
+				
+				// 1개만 존재하는 modal을 재활용하기 위해 data-post-id를 심어놓는다.
+				$("#modal").data('post-id', postId); // setting 
+				// alert($("#modal").data('post-id')); 중간 점검
+			}); // 더보기(...) more-btn 클릭 이벤트 끝
+			
+			// Modal 안에 있는 '삭제하기' postDeleteBtn 클릭 이벤트
+			$("#postDeleteBtn").on('click', function(e) {
+				e.preventDefault();
+				let postId = $("#modal").data("post-id");
+				// alert(postId);
+				
+				// ajax (모든 걸 다 지운다. 글, 댓글들, 좋아요, 사진)
+			}); // Modal 안에 있는 '삭제하기' postDeleteBtn 클릭 이벤트 끝.
 		}); // ready 함수 끝.
     </script>
 </th:block>

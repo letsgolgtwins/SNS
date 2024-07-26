@@ -3,6 +3,20 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
  <mapper namespace="com.sns.like.Mapper.LikeMapper">
+ 	<!-- 로그인 한 유저가(userId)가 특정글(postId)에 좋아요 눌렀는지 조회 -->
+ 	<select id="selectLikeCountByPostIdAndUserId" parameterType="map" resultType="com.sns.like.domain.Like">
+ 		SELECT 
+ 			`postId`
+			,`userId`
+			,`createdAt`
+		FROM 
+			`like`
+		WHERE 
+			`postId` = #{postId}
+		AND
+			`userId` = #{userId}
+ 	</select>
+
  	<!-- 좋아요 insert -->
  	<insert id="insertLikeByPostIdAndUserId" parameterType="map">
  		INSERT INTO	`like`
@@ -29,8 +43,9 @@
  			`userId`= #{userId}
  	</delete>
  	
- 	<!-- 로그인 한 유저가(userId)가 특정글(postId)에 좋아요 눌렀는지 조회 -->
- 	<select id="selectLikeCountByPostIdAndUserId" parameterType="map" resultType="com.sns.like.domain.Like">
+ 	
+ 	<!-- 특정글의 좋아요 개수 db에서 select -->
+ 	<select id="selectLikeCountByPostId" parameterType="int" resultType="com.sns.like.domain.Like">
  		SELECT 
  			`postId`
 			,`userId`
@@ -39,19 +54,18 @@
 			`like`
 		WHERE 
 			`postId` = #{postId}
-		AND
-			`userId` = #{userId}
  	</select>
  	
- 	<!-- 특정 글의 모든 좋아요 개수 조회 -->
- 	<select id="selectLikeCountByPostId" parameterType="int">
+ 	<!-- 하나로 합친 쿼리 -->
+ 	<select id="selectLikeCountByPostIdOrUserId" parameterType="map" resultType="int">
  		SELECT 
-	 		`postId`
-			,`userId`
-			,`createdAt`
-		FROM 
-			`like`
-		WHERE
-			`postId` = #{postId}
+ 			COUNT(*)
+ 		FROM 
+ 			`like`
+ 		WHERE
+ 			`postId` = #{postId}
+ 			<if test="userId != null">
+ 			AND `userId` = #{userId}
+ 			</if>
  	</select>
  </mapper>
